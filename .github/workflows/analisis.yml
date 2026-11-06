@@ -6,7 +6,7 @@ on:
 env:
   SONAR_HOST_URL: https://sonarcloud.io
   SONAR_ORGANIZATION: daniel72157
-  SONAR_PROJECT_KEY: daniel72157
+  SONAR_PROJECT_KEY: Daniel72157_tienda
 
 jobs:
   scan:
