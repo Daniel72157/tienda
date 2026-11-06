@@ -69,7 +69,7 @@ function pageButton(label, page, { disabled = false, current = false } = {}) {
     'aria-label': current ? `Página ${label}, actual` : `Ir a ${typeof label === 'number' ? `la página ${label}` : label}`,
     onclick: () => {
       query.page = page;
-      loadProducts();
+      void loadProducts();
       qs('#catalogo').scrollIntoView({ behavior: 'smooth' });
     },
     text: String(label)
@@ -145,7 +145,7 @@ async function renderCategories() {
           query.category = option.slug;
           query.page = 1;
           buttons.forEach((button, index) => button.setAttribute('aria-pressed', String(options[index].slug === option.slug)));
-          loadProducts();
+          void loadProducts();
         }
       },
       option.name,
@@ -209,8 +209,8 @@ function reviewForm(product, body) {
           const updated = await api.review(product.id, Number(select.value), comment.value.trim());
           renderProductDetail(body, updated);
           showToast('¡Gracias por tu reseña!', 'success');
-          loadProducts();
-          loadFeatured();
+          void loadProducts();
+          void loadFeatured();
         } catch (failure) {
           error.textContent = failure.message;
         }
@@ -264,19 +264,19 @@ export async function initCatalog() {
   qs('#sort-select').addEventListener('change', (event) => {
     query.sort = event.target.value;
     query.page = 1;
-    loadProducts();
+    void loadProducts();
   });
   qs('#filter-input').addEventListener(
     'input',
     debounce((event) => {
       query.q = event.target.value.trim();
       query.page = 1;
-      loadProducts();
+      void loadProducts();
     }, 300)
   );
   document.addEventListener('catalog:refresh', () => {
-    loadProducts();
-    loadFeatured();
+    void loadProducts();
+    void loadFeatured();
   });
 
   await renderCategories().catch(() => showToast('No pudimos cargar las categorías', 'error'));

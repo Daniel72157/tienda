@@ -75,4 +75,6 @@ async function start() {
   await initCatalog();
 }
 
-start();
+start().catch((error) => {
+  console.error('No se pudo iniciar la tienda', error);
+});
