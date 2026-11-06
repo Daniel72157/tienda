@@ -34,6 +34,10 @@ app.use(cors({ origin: process.env.ALLOWED_ORIGIN || 'http://localhost:3000' }))
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: false, limit: '10kb' }));
 
+app.use(requestLogger);
+// Los archivos estaticos se sirven antes de la sesion para no crear sesiones innecesarias
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(session({
   secret: SESSION_SECRET,
   resave: false,
@@ -46,8 +50,6 @@ app.use(session({
   }
 }));
 
-app.use(requestLogger);
-app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api', apiRouter);
 
 // Limite de intentos para frenar fuerza bruta
@@ -181,7 +183,7 @@ app.get('/calc', (req, res) => {
   return res.send(String(operation(a, b)));
 });
 
-app.get('/reset-token', (req, res) => {
+app.get('/reset-token', (_req, res) => {
   res.send(crypto.randomBytes(32).toString('hex'));
 });
 
@@ -195,7 +197,16 @@ app.get('/proxy', (req, res) => {
     response.on('data', (chunk) => {
       body += chunk;
     });
-    response.on('end', () => res.type('text/plain').send(body));
+    response.on('end', () => {
+      // Nunca se refleja el cuerpo crudo del destino: se valida como JSON y se responde como JSON
+      let payload;
+      try {
+        payload = JSON.parse(body);
+      } catch {
+        return res.status(502).send('Respuesta invalida del destino');
+      }
+      return res.json(payload);
+    });
   }).on('error', () => res.status(502).send('Error al consultar el destino'));
 });
 
