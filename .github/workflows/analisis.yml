@@ -1,0 +1,55 @@
+name: Analisis de calidad
+
+on:
+  workflow_dispatch:
+
+env:
+  SONAR_HOST_URL: https://sonarcloud.io
+  SONAR_ORGANIZATION: daniel72157
+  SONAR_PROJECT_KEY: daniel72157
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verificar proyecto existente
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          status=$(curl -s -o /dev/null -w '%{http_code}' \
+            -H "Authorization: Bearer ${SONAR_TOKEN}" \
+            "${SONAR_HOST_URL}/api/components/show?component=${SONAR_PROJECT_KEY}")
+
+          if [ "$status" = "401" ] || [ "$status" = "403" ]; then
+            echo "::error::El token no es valido o no tiene acceso (HTTP ${status}). Revisa el secreto SONAR_TOKEN."
+            exit 1
+          fi
+
+          if [ "$status" != "200" ]; then
+            echo "::error::No existe el proyecto '${SONAR_PROJECT_KEY}' en Sonar (HTTP ${status}). Se cancela para no crear uno nuevo."
+            echo "Claves de proyecto disponibles en la organizacion:"
+            curl -s -H "Authorization: Bearer ${SONAR_TOKEN}" \
+              "${SONAR_HOST_URL}/api/projects/search?organization=${SONAR_ORGANIZATION}" \
+              | jq -r '.components[]?.key' || true
+            exit 1
+          fi
+
+          echo "Proyecto encontrado: ${SONAR_PROJECT_KEY}"
+
+      - name: Analisis
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=${{ env.SONAR_ORGANIZATION }}
+            -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }}
+            -Dsonar.sources=.
+            -Dsonar.exclusions=node_modules/**,.github/**
+            -Dsonar.coverage.exclusions=**/*
+            -Dsonar.qualitygate.wait=true

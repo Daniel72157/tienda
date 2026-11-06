@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Nova: periféricos, pantallas, audio y accesorios para tu escritorio, con envío rápido y garantía.">
+  <title>Nova | Tecnología para tu escritorio</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#catalogo">Saltar al catálogo</a>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="Nova, inicio">
+        <span class="brand-mark" aria-hidden="true">N</span>
+        <span class="brand-name">Nova</span>
+      </a>
+      <nav class="main-nav" aria-label="Principal">
+        <a href="#destacados">Destacados</a>
+        <a href="#catalogo">Catálogo</a>
+        <a href="#boletin">Novedades</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn" id="btn-search" type="button" aria-label="Búsqueda rápida">🔍</button>
+        <button class="icon-btn" id="btn-theme" type="button" aria-label="Cambiar tema">🌙</button>
+        <button class="btn btn-ghost btn-sm" id="btn-account" type="button">Ingresar</button>
+        <button class="icon-btn cart-btn" id="btn-cart" type="button" aria-label="Abrir carrito">
+          🛒<span class="badge" id="cart-badge" hidden>0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true">
+        <span class="orb orb-1"></span>
+        <span class="orb orb-2"></span>
+        <span class="orb orb-3"></span>
+      </div>
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <span class="eyebrow">Nueva temporada · Envío gratis desde $100</span>
+          <h1>Equipa tu escritorio con <span class="gradient-text">tecnología que se siente bien</span></h1>
+          <p class="lead">Periféricos, pantallas y audio seleccionados por su calidad, con garantía de 12 meses y soporte en español.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#catalogo">Explorar catálogo</a>
+            <a class="btn btn-ghost" href="#destacados">Ver destacados</a>
+          </div>
+          <dl class="hero-stats">
+            <div><dt>12</dt><dd>Productos</dd></div>
+            <div><dt>4.4</dt><dd>Valoración media</dd></div>
+            <div><dt>48 h</dt><dd>Envío express</dd></div>
+          </dl>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="float-card fc-1"><span>🎧</span><small>Audio</small></div>
+          <div class="float-card fc-2"><span>⌨️</span><small>Teclados</small></div>
+          <div class="float-card fc-3"><span>🖥️</span><small>Pantallas</small></div>
+          <div class="float-card fc-4"><span>🖱️</span><small>Mouse</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container perks reveal" aria-label="Beneficios">
+      <article class="perk"><span class="perk-icon" aria-hidden="true">🚚</span><div><h3>Envío rápido</h3><p>Entrega en 2 a 5 días hábiles.</p></div></article>
+      <article class="perk"><span class="perk-icon" aria-hidden="true">🛡️</span><div><h3>12 meses de garantía</h3><p>Cobertura contra defectos de fábrica.</p></div></article>
+      <article class="perk"><span class="perk-icon" aria-hidden="true">↩️</span><div><h3>30 días para cambios</h3><p>Devolución sencilla y sin costo.</p></div></article>
+    </section>
+
+    <section class="container section reveal" id="destacados">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Selección del equipo</p>
+          <h2>Los más valorados</h2>
+        </div>
+      </div>
+      <div class="grid" id="featured-grid"></div>
+    </section>
+
+    <section class="container section reveal" id="catalogo">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Catálogo</p>
+          <h2>Todo para tu escritorio</h2>
+        </div>
+        <p class="muted" id="result-count" role="status"></p>
+      </div>
+
+      <div class="toolbar">
+        <div class="chips" id="category-chips" role="group" aria-label="Categorías"></div>
+        <div class="toolbar-controls">
+          <label class="field-inline">
+            <span class="sr-only">Filtrar productos por nombre</span>
+            <input id="filter-input" type="search" placeholder="Filtrar por nombre" autocomplete="off" maxlength="60">
+          </label>
+          <label class="field-inline">
+            <span class="sr-only">Ordenar productos</span>
+            <select id="sort-select">
+              <option value="relevance">Relevancia</option>
+              <option value="price_asc">Precio: menor a mayor</option>
+              <option value="price_desc">Precio: mayor a menor</option>
+              <option value="rating">Mejor valorados</option>
+              <option value="name">Nombre (A-Z)</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="grid" id="product-grid" aria-live="polite"></div>
+      <nav class="pagination" id="pagination" aria-label="Paginación"></nav>
+    </section>
+
+    <section class="container newsletter reveal" id="boletin">
+      <div class="newsletter-copy">
+        <h2>Entérate primero de las novedades</h2>
+        <p>Recibe lanzamientos y ofertas exclusivas. Sin spam, cuando quieras te das de baja.</p>
+      </div>
+      <form class="newsletter-form" id="newsletter-form" novalidate>
+        <label class="sr-only" for="newsletter-email">Correo electrónico</label>
+        <input id="newsletter-email" name="email" type="email" placeholder="tu@correo.com" autocomplete="email" required>
+        <button class="btn btn-primary" type="submit">Suscribirme</button>
+        <p class="form-hint" id="newsletter-msg" role="status"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <a class="brand" href="#top" aria-label="Nova, volver arriba">
+          <span class="brand-mark" aria-hidden="true">N</span>
+          <span class="brand-name">Nova</span>
+        </a>
+        <p class="muted">Tecnología para tu escritorio.</p>
+      </div>
+      <ul class="footer-links">
+        <li><a href="/download?name=terminos.txt">Términos y condiciones</a></li>
+        <li><a href="/download?name=privacidad.txt">Política de privacidad</a></li>
+        <li><a href="/download?name=envios.txt">Política de envíos</a></li>
+      </ul>
+      <p class="muted small">© <span id="year"></span> Nova Store. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <div class="scrim" id="scrim" hidden></div>
+
+  <aside class="drawer" id="cart-drawer" aria-label="Carrito de compras" inert>
+    <div class="drawer-head">
+      <h2>Tu carrito</h2>
+      <button class="icon-btn drawer-close" type="button" aria-label="Cerrar carrito">✕</button>
+    </div>
+    <div class="shipping-progress">
+      <p id="shipping-message"></p>
+      <div class="progress" aria-hidden="true"><span class="progress-fill" id="shipping-fill"></span></div>
+    </div>
+    <ul class="cart-items" id="cart-items"></ul>
+    <div class="drawer-foot">
+      <dl class="totals">
+        <div><dt>Subtotal</dt><dd id="cart-subtotal">$0.00</dd></div>
+        <div><dt>Envío</dt><dd id="cart-shipping">$0.00</dd></div>
+        <div class="totals-final"><dt>Total</dt><dd id="cart-total">$0.00</dd></div>
+      </dl>
+      <button class="btn btn-primary btn-block" id="btn-checkout" type="button" disabled>Finalizar compra</button>
+    </div>
+  </aside>
+
+  <dialog id="auth-dialog" aria-labelledby="auth-title">
+    <div class="dialog-body">
+      <button class="icon-btn dialog-close" type="button" data-close aria-label="Cerrar">✕</button>
+      <h2 id="auth-title">Te damos la bienvenida</h2>
+      <div class="tabs" id="auth-tabs">
+        <button class="tab active" type="button" data-mode="login" aria-pressed="true">Ingresar</button>
+        <button class="tab" type="button" data-mode="register" aria-pressed="false">Crear cuenta</button>
+      </div>
+      <form id="auth-form" novalidate>
+        <label class="field"><span>Usuario</span>
+          <input name="username" type="text" autocomplete="username" maxlength="30" required>
+        </label>
+        <label class="field"><span>Contraseña</span>
+          <input name="password" type="password" autocomplete="current-password" maxlength="72" required>
+        </label>
+        <p class="form-error" id="auth-error" role="alert"></p>
+        <button class="btn btn-primary btn-block" id="auth-submit" type="submit">Ingresar</button>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog id="account-dialog" aria-labelledby="account-title">
+    <div class="dialog-body">
+      <button class="icon-btn dialog-close" type="button" data-close aria-label="Cerrar">✕</button>
+      <h2 id="account-title">Mi cuenta</h2>
+      <p class="muted" id="account-name"></p>
+      <div class="stack">
+        <button class="btn btn-ghost btn-block" id="btn-orders" type="button">Mis pedidos</button>
+        <button class="btn btn-primary btn-block" id="btn-logout" type="button">Cerrar sesión</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="product-dialog" class="dialog-wide" aria-label="Detalle del producto">
+    <div class="dialog-body">
+      <button class="icon-btn dialog-close" type="button" data-close aria-label="Cerrar">✕</button>
+      <div id="product-dialog-body"></div>
+    </div>
+  </dialog>
+
+  <dialog id="checkout-dialog" class="dialog-wide" aria-labelledby="checkout-title">
+    <div class="dialog-body">
+      <button class="icon-btn dialog-close" type="button" data-close aria-label="Cerrar">✕</button>
+      <div id="checkout-view">
+        <h2 id="checkout-title">Finalizar compra</h2>
+        <div class="checkout-layout">
+          <form id="checkout-form" novalidate>
+            <label class="field"><span>Nombre completo</span>
+              <input name="fullName" type="text" autocomplete="name" maxlength="80" required>
+            </label>
+            <label class="field"><span>Dirección de envío</span>
+              <input name="address" type="text" autocomplete="street-address" maxlength="120" required>
+            </label>
+            <label class="field"><span>Ciudad</span>
+              <input name="city" type="text" autocomplete="address-level2" maxlength="60" required>
+            </label>
+            <p class="form-error" id="checkout-error" role="alert"></p>
+            <button class="btn btn-primary btn-block" id="checkout-submit" type="submit">Confirmar pedido</button>
+          </form>
+          <div class="summary">
+            <h3>Resumen</h3>
+            <ul id="checkout-summary"></ul>
+            <p class="summary-total"><span>Total</span><strong id="checkout-total"></strong></p>
+          </div>
+        </div>
+      </div>
+      <div id="success-view" class="success" hidden>
+        <div class="confetti" id="confetti" aria-hidden="true"></div>
+        <div class="check" aria-hidden="true"></div>
+        <h2>¡Pedido confirmado!</h2>
+        <p class="muted" id="success-text"></p>
+        <button class="btn btn-primary" type="button" data-close>Seguir comprando</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="orders-dialog" class="dialog-wide" aria-labelledby="orders-title">
+    <div class="dialog-body">
+      <button class="icon-btn dialog-close" type="button" data-close aria-label="Cerrar">✕</button>
+      <h2 id="orders-title">Mis pedidos</h2>
+      <div id="orders-list"></div>
+    </div>
+  </dialog>
+
+  <dialog id="search-dialog" class="dialog-wide" aria-labelledby="search-title">
+    <div class="dialog-body">
+      <button class="icon-btn dialog-close" type="button" data-close aria-label="Cerrar">✕</button>
+      <h2 id="search-title">Búsqueda rápida</h2>
+      <form class="search-form" id="search-form" novalidate>
+        <label class="sr-only" for="search-input">Buscar productos</label>
+        <input id="search-input" type="search" placeholder="Busca por nombre del producto" autocomplete="off" maxlength="50">
+        <button class="btn btn-primary" type="submit">Buscar</button>
+      </form>
+      <div class="search-results" id="search-results" aria-live="polite"></div>
+    </div>
+  </dialog>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+</body>
+</html>
